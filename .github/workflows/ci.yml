@@ -1,0 +1,36 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ] # Se activa en push a estas ramas
+  pull_request:
+    branches: [ main, master ] # Se activa en PRs a estas ramas
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [22.x] # Versión de Node.js
+    
+    steps:
+    - uses: actions/checkout@v4 # Checkout del código
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm' # Habilita caching de dependencias
+    
+    - name: Install dependencies
+      run: npm ci # Instala dependencias de manera limpia y consistente
+    
+    - name: Run unit tests
+      run: npm test -- --watchAll=false # Ejecuta tests sin modo watch
+    
+    - name: Build project
+      run: npm run build
+    
+    - name: CI completed successfully
+      run: echo "✅ Build and tests passed!"
