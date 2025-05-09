@@ -27,7 +27,10 @@ jobs:
       run: npm ci # Instala dependencias de manera limpia y consistente
     
     - name: Run unit tests
-      run: npm test -- --watchAll=false # Ejecuta tests sin modo watch
+      run: npm run test # Ejecuta tests
+
+    - name: Run Linter
+      run: npm run lint
     
     - name: Build project
       run: npm run build
