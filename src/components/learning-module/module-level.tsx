@@ -1,6 +1,6 @@
 import React from "react";
 import { Topic } from "../../types/topic";
-import TopicCard from "./topic-card";
+import { TopicCard } from "./topic-card";
 
 interface Props{
     level: "Básico" | "Intermedio" | "Avanzado";

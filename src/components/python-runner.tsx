@@ -82,7 +82,7 @@ const PythonEditor = () => {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-white rounded-2xl p-4 shadow-lg">
+    <div className="w-full max-w-3xl mx-auto bg-blue-200 rounded-2xl p-4 shadow-lg">
       <Editor
         height="300px"
         defaultLanguage="python"
