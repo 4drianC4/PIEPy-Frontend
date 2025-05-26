@@ -1,6 +1,30 @@
 import { Editor } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
 
+declare global {
+  interface Window {
+    Sk: {
+      configure: (options: {
+        output: (text: string) => void;
+        read: (x: string) => string;
+      }) => void;
+      importMainWithBody: (
+        name: string,
+        async: boolean,
+        code: string,
+        auto: boolean
+      ) => Promise<void>;
+      builtinFiles: {
+        files: {
+          [key: string]: string;
+        };
+      };
+      pre?: string;
+      onAfterImport?: () => void;
+    };
+  }
+}
+
 const PythonEditor = () => {
   const [code, setCode] = useState("# escribe tu código aquí\n");
   const [output, setOutput] = useState("");
@@ -10,40 +34,34 @@ const PythonEditor = () => {
   useEffect(() => {
     const loadSkulpt = async () => {
       const script1 = document.createElement("script");
-        script1.src = "https://cdn.jsdelivr.net/npm/skulpt@1.2.0/skulpt.min.js";
-        script1.async = true;
-        script1.onload = () => console.log("✅ skulpt.min.js cargado");
+      script1.src = "https://cdn.jsdelivr.net/npm/skulpt@1.2.0/skulpt.min.js";
+      script1.async = true;
+      script1.onload = () => console.log("✅ skulpt.min.js cargado");
 
-        const script2 = document.createElement("script");
-        script2.src = "https://cdn.jsdelivr.net/npm/skulpt@1.2.0/skulpt-stdlib.js";
-        script2.async = true;
-        script2.onload = () => console.log("✅ skulpt-stdlib.js cargado");
-        
+      const script2 = document.createElement("script");
+      script2.src = "https://cdn.jsdelivr.net/npm/skulpt@1.2.0/skulpt-stdlib.js";
+      script2.async = true;
+      script2.onload = () => console.log("✅ skulpt-stdlib.js cargado");
+
       document.body.appendChild(script1);
       document.body.appendChild(script2);
 
-      const checkSkulptLoaded = () => {
-        const Sk = (window as any).Sk;
-        return Sk && Sk.configure && Sk.builtinFiles && Sk.builtinFiles.files;
-      };
-
       const interval = setInterval(() => {
-  const Sk = (window as any).Sk;
-  if (Sk && Sk.configure) {
-    Sk.configure({
-      read: (x: string) => Sk.builtinFiles["files"][x],
-      output: () => {},
-    });
-    Sk.pre = "output";
-    Sk.onAfterImport = () => {
-      clearInterval(interval);
-      setSkulptReady(true);
-      console.log("✅ Skulpt totalmente listo");
-    };
-    Sk.importMainWithBody("<stdin>", false, "print('ready')", true);
+        const Sk = window.Sk;
+        if (Sk && Sk.configure) {
+          Sk.configure({
+            read: (x: string) => Sk.builtinFiles["files"][x],
+            output: () => {},
+          });
+          Sk.pre = "output";
+          Sk.onAfterImport = () => {
+            clearInterval(interval);
+            setSkulptReady(true);
+            console.log("✅ Skulpt totalmente listo");
+          };
+          Sk.importMainWithBody("<stdin>", false, "print('ready')", true);
         }
-        }, 300);
-
+      }, 300);
     };
 
     loadSkulpt();
@@ -52,7 +70,7 @@ const PythonEditor = () => {
   const runCode = () => {
     setOutput("");
 
-    const Sk = (window as any).Sk;
+    const Sk = window.Sk;
 
     if (!Sk || !Sk.configure) {
       setOutput("⚠️ Skulpt aún no está cargado.");
@@ -65,14 +83,14 @@ const PythonEditor = () => {
       },
       read: (x: string) => {
         if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
-          throw `Archivo no encontrado: '${x}'`;
+          throw new Error(`Archivo no encontrado: '${x}'`);
         }
         return Sk.builtinFiles["files"][x];
       },
     });
 
-    Sk.importMainWithBody("<stdin>", false, code, true).catch((err: any) => {
-      setOutput((prev) => prev + `\n❌ Error: ${err}`);
+    Sk.importMainWithBody("<stdin>", false, code, true).catch((err: unknown) => {
+      setOutput((prev) => prev + `\n❌ Error: ${String(err)}`);
     });
   };
 
@@ -87,7 +105,7 @@ const PythonEditor = () => {
         height="300px"
         defaultLanguage="python"
         value={code}
-        onChange={(value) => setCode(value || "")}
+        onChange={(value: string | undefined) => setCode(value || "")}
         className="w-full border border-gray-300 rounded-md font-mono text-sm"
         theme="vs-dark"
       />
