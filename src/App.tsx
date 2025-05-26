@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import Login from "./pages/Login";
 import CrearSeccion from "./pages/CrearSeccion";
 import NotFound from "./pages/NotFound";
 import CrearExamen from "./pages/CrearExamen";
@@ -25,6 +26,7 @@ const App: React.FC = () => (
             <Route path="/crear-seccion" element={<CrearSeccion />} />
             <Route path="/crear-examen" element={<CrearExamen />} />
             <Route path="/crear-ejercicio" element={<CrearEjercicio />} />
+            <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
@@ -32,5 +34,5 @@ const App: React.FC = () => (
   </QueryClientProvider>
 );
 
-
 export default App;
+
