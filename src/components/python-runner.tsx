@@ -21,7 +21,6 @@ const PythonEditor = () => {
       }
     };
 
-    // Cargar script si no está cargado aún
     if (!(window as any).loadPyodide) {
       const script = document.createElement("script");
       script.src = "https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js";
@@ -46,7 +45,6 @@ const PythonEditor = () => {
       setOutput(`❌ Error de ejecución:\n${String(err)}`);
     }
 
-    // Auto scroll al fondo
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
