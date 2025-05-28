@@ -6,16 +6,22 @@ interface LoadPyodideOptions {
   indexURL: string;
 }
 
+interface PyodideInterface {
+  runPython: (code: string) => any;
+  runPythonAsync: (code: string) => Promise<any>;
+}
+
 declare global {
   interface Window {
-    loadPyodide: (options: LoadPyodideOptions) => Promise<any>;
+    loadPyodide: (options: LoadPyodideOptions) => Promise<PyodideInterface>;
   }
 }
+
 
 const PythonEditor = () => {
   const [code, setCode] = useState("# Escribe tu código Python aquí 🐍\n");
   const [output, setOutput] = useState("⏳ Cargando Pyodide...");
-  const [pyodide, setPyodide] = useState<any>(null);
+  const [pyodide, setPyodide] = useState<PyodideInterface | null>(null);
   const outputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -82,7 +88,7 @@ sys.stderr = sys.stdout
         height="300px"
         defaultLanguage="python"
         value={code}
-        onChange={(value) => setCode(value || "")}
+        onChange={(value: string | undefined) => setCode(value || "")}
         className="w-full border border-gray-300 rounded-md font-mono text-sm"
         theme="vs-dark"
       />
