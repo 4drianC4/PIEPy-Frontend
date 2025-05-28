@@ -40,7 +40,6 @@ const runCode = async () => {
   try {
     setOutput("▶️ Ejecutando código...");
 
-    // Redirige stdout y stderr a variables que podemos leer
     pyodide.runPython(`
 import sys
 from io import StringIO
