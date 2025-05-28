@@ -1,6 +1,17 @@
 import { Editor } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
 
+// 👉 Agregamos este tipo para que TypeScript no se queje
+interface LoadPyodideOptions {
+  indexURL: string;
+}
+
+declare global {
+  interface Window {
+    loadPyodide: (options: LoadPyodideOptions) => Promise<any>;
+  }
+}
+
 const PythonEditor = () => {
   const [code, setCode] = useState("# Escribe tu código Python aquí 🐍\n");
   const [output, setOutput] = useState("⏳ Cargando Pyodide...");
@@ -11,7 +22,7 @@ const PythonEditor = () => {
     const loadPyodide = async () => {
       setOutput("⏳ Cargando Pyodide...");
       try {
-        const pyodideInstance = await (window as any).loadPyodide({
+        const pyodideInstance = await window.loadPyodide({
           indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.1/full/",
         });
         setPyodide(pyodideInstance);
@@ -21,7 +32,7 @@ const PythonEditor = () => {
       }
     };
 
-    if (!(window as any).loadPyodide) {
+    if (!window.loadPyodide) {
       const script = document.createElement("script");
       script.src = "https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js";
       script.onload = loadPyodide;
@@ -31,34 +42,34 @@ const PythonEditor = () => {
     }
   }, []);
 
-const runCode = async () => {
-  if (!pyodide) {
-    setOutput("⚠️ Pyodide aún no está listo...");
-    return;
-  }
+  const runCode = async () => {
+    if (!pyodide) {
+      setOutput("⚠️ Pyodide aún no está listo...");
+      return;
+    }
 
-  try {
-    setOutput("▶️ Ejecutando código...");
+    try {
+      setOutput("▶️ Ejecutando código...");
 
-    pyodide.runPython(`
+      pyodide.runPython(`
 import sys
 from io import StringIO
 sys.stdout = StringIO()
 sys.stderr = sys.stdout
-    `);
+      `);
 
-    await pyodide.runPythonAsync(code);
+      await pyodide.runPythonAsync(code);
 
-    const outputText = pyodide.runPython("sys.stdout.getvalue()");
-    setOutput(`✅ Resultado:\n${outputText || "(sin salida)"}`);
-  } catch (err) {
-    setOutput(`❌ Error de ejecución:\n${String(err)}`);
-  }
+      const outputText = pyodide.runPython("sys.stdout.getvalue()");
+      setOutput(`✅ Resultado:\n${outputText || "(sin salida)"}`);
+    } catch (err) {
+      setOutput(`❌ Error de ejecución:\n${String(err)}`);
+    }
 
-  if (outputRef.current) {
-    outputRef.current.scrollTop = outputRef.current.scrollHeight;
-  }
-};
+    if (outputRef.current) {
+      outputRef.current.scrollTop = outputRef.current.scrollHeight;
+    }
+  };
 
   const clearEditor = () => {
     setCode("");
