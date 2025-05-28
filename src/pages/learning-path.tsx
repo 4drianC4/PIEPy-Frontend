@@ -3,6 +3,7 @@ import { TopicDetail } from "../components/learning-module/topic-detail";
 import PythonEditor from "../components/python-runner";
 import Sidebar from "../components/Sidebar";
 import Navbar from "@/components/Navbar";
+import PythonExercise from "@/components/python-exercise";
 
 
 export default function LearningPath(){

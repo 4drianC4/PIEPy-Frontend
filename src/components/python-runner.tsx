@@ -31,24 +31,35 @@ const PythonEditor = () => {
     }
   }, []);
 
-  const runCode = async () => {
-    if (!pyodide) {
-      setOutput("⚠️ Pyodide aún no está listo...");
-      return;
-    }
+const runCode = async () => {
+  if (!pyodide) {
+    setOutput("⚠️ Pyodide aún no está listo...");
+    return;
+  }
 
-    try {
-      setOutput("▶️ Ejecutando código...");
-      const result = await pyodide.runPythonAsync(code);
-      setOutput(`✅ Resultado:\n${result ?? "(sin salida)"}`);
-    } catch (err) {
-      setOutput(`❌ Error de ejecución:\n${String(err)}`);
-    }
+  try {
+    setOutput("▶️ Ejecutando código...");
 
-    if (outputRef.current) {
-      outputRef.current.scrollTop = outputRef.current.scrollHeight;
-    }
-  };
+    // Redirige stdout y stderr a variables que podemos leer
+    pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+sys.stderr = sys.stdout
+    `);
+
+    await pyodide.runPythonAsync(code);
+
+    const outputText = pyodide.runPython("sys.stdout.getvalue()");
+    setOutput(`✅ Resultado:\n${outputText || "(sin salida)"}`);
+  } catch (err) {
+    setOutput(`❌ Error de ejecución:\n${String(err)}`);
+  }
+
+  if (outputRef.current) {
+    outputRef.current.scrollTop = outputRef.current.scrollHeight;
+  }
+};
 
   const clearEditor = () => {
     setCode("");
