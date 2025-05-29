@@ -1,106 +1,87 @@
 import { Editor } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
 
+interface LoadPyodideOptions {
+  indexURL: string;
+}
+
+interface PyodideInterface {
+  runPython: (code: string) => unknown;
+  runPythonAsync: (code: string) => Promise<unknown>;
+}
+
 declare global {
   interface Window {
-    Sk: {
-      configure: (options: {
-        output: (text: string) => void;
-        read: (x: string) => string;
-      }) => void;
-      importMainWithBody: (
-        name: string,
-        async: boolean,
-        code: string,
-        auto: boolean
-      ) => Promise<void>;
-      builtinFiles: {
-        files: {
-          [key: string]: string;
-        };
-      };
-      pre?: string;
-      onAfterImport?: () => void;
-    };
+    loadPyodide: (options: LoadPyodideOptions) => Promise<PyodideInterface>;
   }
 }
 
 const PythonEditor = () => {
-  const [code, setCode] = useState("# escribe tu código aquí\n");
-  const [output, setOutput] = useState("");
-  const [skulptReady, setSkulptReady] = useState(false);
+  const [code, setCode] = useState("# Escribe tu código Python aquí 🐍\n");
+  const [output, setOutput] = useState("⏳ Cargando Pyodide...");
+  const [pyodide, setPyodide] = useState<PyodideInterface | null>(null);
   const outputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const loadSkulpt = async () => {
-      const script1 = document.createElement("script");
-      script1.src = "https://cdn.jsdelivr.net/npm/skulpt@1.2.0/skulpt.min.js";
-      script1.async = true;
-      script1.onload = () => console.log("✅ skulpt.min.js cargado");
-
-      const script2 = document.createElement("script");
-      script2.src = "https://cdn.jsdelivr.net/npm/skulpt@1.2.0/skulpt-stdlib.js";
-      script2.async = true;
-      script2.onload = () => console.log("✅ skulpt-stdlib.js cargado");
-
-      document.body.appendChild(script1);
-      document.body.appendChild(script2);
-
-      const interval = setInterval(() => {
-        const Sk = window.Sk;
-        if (Sk && Sk.configure) {
-          Sk.configure({
-            read: (x: string) => Sk.builtinFiles["files"][x],
-            output: () => {},
-          });
-          Sk.pre = "output";
-          Sk.onAfterImport = () => {
-            clearInterval(interval);
-            setSkulptReady(true);
-            console.log("✅ Skulpt totalmente listo");
-          };
-          Sk.importMainWithBody("<stdin>", false, "print('ready')", true);
-        }
-      }, 300);
+    const loadPyodide = async () => {
+      setOutput("⏳ Cargando Pyodide...");
+      try {
+        const pyodideInstance = await window.loadPyodide({
+          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.1/full/",
+        });
+        setPyodide(pyodideInstance);
+        setOutput("✅ Pyodide listo. ¡Escribe y ejecuta tu código!");
+      } catch (err) {
+        setOutput(`❌ Error cargando Pyodide: ${String(err)}`);
+      }
     };
 
-    loadSkulpt();
+    if (!window.loadPyodide) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js";
+      script.onload = loadPyodide;
+      document.body.appendChild(script);
+    } else {
+      loadPyodide();
+    }
   }, []);
 
-  const runCode = () => {
-    setOutput("");
-
-    const Sk = window.Sk;
-
-    if (!Sk || !Sk.configure) {
-      setOutput("⚠️ Skulpt aún no está cargado.");
+  const runCode = async () => {
+    if (!pyodide) {
+      setOutput("⚠️ Pyodide aún no está listo...");
       return;
     }
 
-    Sk.configure({
-      output: (text: string) => {
-        setOutput((prev) => prev + text);
-      },
-      read: (x: string) => {
-        if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
-          throw new Error(`Archivo no encontrado: '${x}'`);
-        }
-        return Sk.builtinFiles["files"][x];
-      },
-    });
+    try {
+      setOutput("▶️ Ejecutando código...");
 
-    Sk.importMainWithBody("<stdin>", false, code, true).catch((err: unknown) => {
-      setOutput((prev) => prev + `\n❌ Error: ${String(err)}`);
-    });
+      pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+sys.stderr = sys.stdout
+      `);
+
+      await pyodide.runPythonAsync(code);
+
+      const outputText = pyodide.runPython("sys.stdout.getvalue()");
+      setOutput(`✅ Resultado:\n${String(outputText) || "(sin salida)"}`);
+    } catch (err) {
+      setOutput(`❌ Error de ejecución:\n${String(err)}`);
+    }
+
+    if (outputRef.current) {
+      outputRef.current.scrollTop = outputRef.current.scrollHeight;
+    }
   };
 
   const clearEditor = () => {
     setCode("");
-    setOutput("");
+    setOutput("🧼 Editor y consola limpiados.");
   };
 
   return (
-    <div className="flex flex-col mx-auto bg-blue-200 rounded-2xl p-4 shadow-lg">
+    <div className="flex flex-col mx-auto bg-purple-100 dark:bg-gray-800 rounded-2xl p-4 shadow-lg transition-all">
       <Editor
         height="300px"
         defaultLanguage="python"
@@ -123,10 +104,11 @@ const PythonEditor = () => {
           Limpiar editor
         </button>
       </div>
-      <div className="mt-4 p-4 bg-black text-green-400 rounded h-40 overflow-auto font-mono">
-        <pre className="bg-gray-900 text-green-300 p-4 rounded overflow-x-auto min-h-[100px] whitespace-pre-wrap">
-          {output || "Salida aquí..."}
-        </pre>
+      <div
+        ref={outputRef}
+        className="mt-4 p-4 bg-black text-green-400 rounded h-40 overflow-auto font-mono"
+      >
+        <pre className="whitespace-pre-wrap">{output}</pre>
       </div>
     </div>
   );
