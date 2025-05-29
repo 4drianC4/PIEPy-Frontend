@@ -1,14 +1,13 @@
 import { Editor } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
 
-// 👉 Agregamos este tipo para que TypeScript no se queje
 interface LoadPyodideOptions {
   indexURL: string;
 }
 
 interface PyodideInterface {
-  runPython: (code: string) => any;
-  runPythonAsync: (code: string) => Promise<any>;
+  runPython: (code: string) => unknown;
+  runPythonAsync: (code: string) => Promise<unknown>;
 }
 
 declare global {
@@ -16,7 +15,6 @@ declare global {
     loadPyodide: (options: LoadPyodideOptions) => Promise<PyodideInterface>;
   }
 }
-
 
 const PythonEditor = () => {
   const [code, setCode] = useState("# Escribe tu código Python aquí 🐍\n");
@@ -67,7 +65,7 @@ sys.stderr = sys.stdout
       await pyodide.runPythonAsync(code);
 
       const outputText = pyodide.runPython("sys.stdout.getvalue()");
-      setOutput(`✅ Resultado:\n${outputText || "(sin salida)"}`);
+      setOutput(`✅ Resultado:\n${String(outputText) || "(sin salida)"}`);
     } catch (err) {
       setOutput(`❌ Error de ejecución:\n${String(err)}`);
     }
