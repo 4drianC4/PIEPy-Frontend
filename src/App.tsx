@@ -9,6 +9,7 @@ import CrearSeccion from "./pages/CrearSeccion";
 import NotFound from "./pages/NotFound";
 import CrearExamen from "./pages/CrearExamen";
 import CrearEjercicio from "./pages/CrearEjercicio";
+import Recursos from "./pages/Recursos";
 import Lecciones from "./pages/Lecciones";
 import LearningPath from "./pages/learning-path";
 
@@ -27,6 +28,7 @@ const App: React.FC = () => (
             <Route path="/crear-examen" element={<CrearExamen />} />
             <Route path="/crear-ejercicio" element={<CrearEjercicio />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/recursos" element={<Recursos />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
