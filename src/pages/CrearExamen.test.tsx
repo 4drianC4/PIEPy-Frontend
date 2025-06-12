@@ -23,7 +23,7 @@ vi.mock('@/components/Navbar', () => ({
 }));
 
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, variant, className }: any) => (
+  Button: ({ children, onClick, variant, className }) => (
     <button 
       onClick={onClick}
       data-testid={variant === 'outline' ? 'outline-button' : 'primary-button'}
@@ -35,7 +35,7 @@ vi.mock('@/components/ui/button', () => ({
 }));
 
 vi.mock('@/components/ui/textarea', () => ({
-  Textarea: ({ placeholder, className }: any) => (
+  Textarea: ({ placeholder, className }) => (
     <textarea 
       data-testid="textarea"
       placeholder={placeholder}
@@ -45,7 +45,7 @@ vi.mock('@/components/ui/textarea', () => ({
 }));
 
 vi.mock('@/components/ui/input', () => ({
-  Input: ({ placeholder }: any) => (
+  Input: ({ placeholder }) => (
     <input 
       data-testid="input"
       placeholder={placeholder}
