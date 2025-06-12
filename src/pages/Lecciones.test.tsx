@@ -20,7 +20,7 @@ vi.mock('@/components/LessonCard', () => ({
     exerciseDescription,
     initialCode,
     expectedSolution
-  }: any) => (
+  }) => (
     <div data-testid="lesson-card">
       <h2>{title}</h2>
       <p>{description}</p>
