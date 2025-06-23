@@ -3,29 +3,24 @@ import { TopicDetail } from "../components/learning-module/topic-detail";
 import PythonEditor from "../components/python-runner";
 import Sidebar from "../components/Sidebar";
 import Navbar from "@/components/Navbar";
-import PythonExercise from "@/components/python-exercise";
 
-
-export default function LearningPath(){
-    const [selectedTopic, setSelectedTopic]= useState("Introduccion");
+export default function LearningPath() {
+    const [selectedTopic, setSelectedTopic] = useState("Introduccion");
 
     return (
-  <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <div className="flex flex-1">
-        <Sidebar  onSelect={setSelectedTopic} />
-    <div className="flex flex-col flex-1">
-      <main className="flex flex-col p-6 overflow-y-auto">
-        <TopicDetail topic={selectedTopic} />
-      </main>
-
-      <div className="p-4 border-t border-gray-300 dark:border-gray-700">
-        <PythonEditor />
-      </div>
-    </div>
-  </div>
-  </div>
-);
-
+        <div className="flex h-screen">
+            <Sidebar onSelect={setSelectedTopic} />
+            <div className="flex-1 flex flex-col overflow-hidden">
+                <Navbar />
+                <div className="flex-1 overflow-y-auto">
+                    <main className="flex flex-col p-6">
+                        <TopicDetail topic={selectedTopic} />
+                    </main>
+                    <div className="p-4 border-t border-gray-300">
+                        <PythonEditor />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
