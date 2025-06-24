@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/home"
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import CrearSeccion from "./pages/CrearSeccion";
@@ -29,6 +30,7 @@ const App: React.FC = () => (
             <Route path="/crear-ejercicio" element={<CrearEjercicio />} />
             <Route path="/login" element={<Login />} />
             <Route path="/recursos" element={<Recursos />} />
+            <Route path="/home" element={<Home />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
