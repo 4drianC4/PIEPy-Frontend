@@ -151,13 +151,6 @@ export default function IntroduccionPython() {
               <span className="text-green-400">print</span>(
               <span className="text-yellow-300">"¡Hola Mundo!"</span>)
             </div>
-
-            <div className="flex justify-end">
-              <Button className="gap-2 bg-python-blue hover:bg-blue-700">
-                <Play className="w-4 h-4" />
-                Ejecutar código
-              </Button>
-            </div>
           </section>
 
           <section className="bg-white rounded-xl shadow-sm p-6">

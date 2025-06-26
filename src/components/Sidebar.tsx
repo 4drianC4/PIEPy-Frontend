@@ -106,16 +106,16 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onSelect }) => {
   return (
     <div
       className={cn(
-        "w-64 bg-python-blue text-white min-h-screen p-6 flex flex-col sticky top-0 z-20",
+        "w-64 bg-python-blue text-white min-h-screen p-6 flex flex-col fixed top-0 left-0 bottom-0 z-20 overflow-y-auto",
         className
       )}
     >
-      <div className="flex items-center space-x-2 mb-8">
+      <div className="flex items-center space-x-2 mb-8 sticky top-0 bg-python-blue pt-2 pb-4 z-10">
         <div className="w-12 h-12 rounded-full bg-black"></div>
         <span className="font-bold">Python Academy</span>
       </div>
 
-      <div className="flex-1 space-y-6">
+      <div className="flex-1 space-y-6 pb-6">
         {/* Navegación Principal */}
         <div>
           <Link
