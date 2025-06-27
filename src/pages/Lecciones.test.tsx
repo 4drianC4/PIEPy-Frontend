@@ -54,7 +54,7 @@ describe('Lecciones Page', () => {
     const mainElement = screen.getByRole('main');
     expect(mainElement).toHaveClass('flex-1');
     expect(mainElement).toHaveClass('p-6');
-    expect(mainElement).toHaveClass('overflow-auto');
+    expect(mainElement).toHaveClass('overflow-y-auto');
     
     const container = screen.getByTestId('lesson-card').parentElement;
     expect(container).toHaveClass('max-w-3xl');

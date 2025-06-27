@@ -30,7 +30,7 @@ const Progreso = () => {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Navbar />
-        <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
+        <div className="flex-1 space-y-8 max-w-4xl mx-auto py-8 px-4">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-3xl font-bold mb-8">Mi Progreso</h1>
             

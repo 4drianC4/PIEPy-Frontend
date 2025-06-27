@@ -16,7 +16,11 @@ declare global {
   }
 }
 
-const PythonEditor = () => {
+interface PythonEditorProps {
+  height?: string;
+}
+
+const PythonEditor = ({ height = "300px" }: PythonEditorProps) => {
   const [code, setCode] = useState("# Escribe tu código Python aquí 🐍\n");
   const [output, setOutput] = useState("⏳ Cargando Pyodide...");
   const [pyodide, setPyodide] = useState<PyodideInterface | null>(null);
@@ -83,7 +87,7 @@ sys.stderr = sys.stdout
   return (
     <div className="flex flex-col mx-auto bg-purple-100 dark:bg-gray-800 rounded-2xl p-4 shadow-lg transition-all">
       <Editor
-        height="300px"
+        height={height}
         defaultLanguage="python"
         value={code}
         onChange={(value: string | undefined) => setCode(value || "")}
