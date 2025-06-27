@@ -1,11 +1,34 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { getCursos } from '@/api/cursos';
+import { toast } from 'react-hot-toast';
+import { getCurso } from '@/types/curso';
 
 const Recursos = () => {
   const navigate = useNavigate();
+
+  const [cursos, setCursos] = useState<getCurso[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Obtener cursos de la API
+  useEffect(() => {
+    const fetchCursos = async () => {
+      try {
+        const cursosData = await getCursos();
+        setCursos(cursosData);
+      } catch (error) {
+        console.error('Error al obtener cursos:', error);
+        toast.error('Error al cargar los cursos');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCursos();
+  }, []);
   
   // Datos de ejemplo para videos y recursos
   const videos = [
@@ -72,12 +95,56 @@ const Recursos = () => {
                 <Button variant="outline" onClick={() => navigate('/crear-ejercicio')}>
                   Crear Ejercicio
                 </Button>
-                <Button className="bg-python-blue text-white hover:bg-blue-800">
-                  Añadir Recurso
+                <Button className="bg-python-blue text-white hover:bg-blue-800"
+                    onClick={() => navigate('/crear-curso')}>
+                  Añadir Curso
                 </Button>
               </div>
             </div>
-            
+            <section className="mb-12">
+              <h3 className="text-xl font-semibold mb-4 pb-2 border-b border-gray-200">
+                Cursos Disponibles
+              </h3>
+              
+              {loading ? (
+                <div className="flex justify-center items-center h-40">
+                  <p>Cargando cursos...</p>
+                </div>
+              ) : cursos.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">No hay cursos disponibles</p>
+                  <Button 
+                    className="mt-4 bg-python-blue text-white hover:bg-blue-800"
+                    onClick={() => navigate('/crear-curso')}
+                  >
+                    Crear Primer Curso
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {cursos.map((curso) => (
+                    <div 
+                      key={curso.id} 
+                      className="rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow border border-gray-200"
+                    >
+                      <div className="p-4">
+                        <h4 className="font-bold text-lg mb-2">{curso.nombre}</h4>
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                          {curso.descripcion}
+                        </p>
+                        <Button 
+                          variant="outline" 
+                          className="w-full border-python-blue text-python-blue hover:bg-python-lightblue hover:text-white"
+                          onClick={() => navigate(`/curso/${curso.id}`)}
+                        >
+                          Ver Curso
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
             {/* Sección de Videos */}
             <section className="mb-12">
               <h3 className="text-xl font-semibold mb-4 pb-2 border-b border-gray-200">
