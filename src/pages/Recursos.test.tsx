@@ -44,7 +44,7 @@ describe('Recursos Page', () => {
     
     // Check buttons
     expect(screen.getByText('Crear Ejercicio')).toBeInTheDocument();
-    expect(screen.getByText('Añadir Recurso')).toBeInTheDocument();
+    expect(screen.getByText('Añadir Curso')).toBeInTheDocument();
     
     // Check section titles
     expect(screen.getByText('Videos Tutoriales')).toBeInTheDocument();
