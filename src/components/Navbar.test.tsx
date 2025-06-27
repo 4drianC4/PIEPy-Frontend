@@ -16,10 +16,9 @@ describe('Navbar Component', () => {
       </BrowserRouter>
     );
     
+    expect(screen.getByText('Inicio')).toBeInTheDocument();
+    expect(screen.getByText('Ruta de Aprendizaje')).toBeInTheDocument();
     expect(screen.getByText('Crear Contenido')).toBeInTheDocument();
-    expect(screen.getByText('Apoyo Estudiantil')).toBeInTheDocument();
-    expect(screen.getByText('Evaluacion')).toBeInTheDocument();
-    expect(screen.getByText('Certificacion')).toBeInTheDocument();
     expect(screen.getByText('Guardar')).toBeInTheDocument();
   });
 });
