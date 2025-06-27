@@ -5,6 +5,7 @@ export interface getEvaluacion {
 }
 
 export interface Evaluacion{
+  id?: number;
   contenido: string;
   titulo: string
 }

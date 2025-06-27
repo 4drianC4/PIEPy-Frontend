@@ -5,6 +5,7 @@ export interface getCertificacion {
 }
 
 export interface Certificacion{
+  id?: number;
   nombre: string;
   descripcion: string
 }
