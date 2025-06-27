@@ -1,4 +1,3 @@
-// src/api/cursos.ts
 import api from './index';
 import { getCurso, Curso } from '../types/curso';
 
@@ -24,7 +23,7 @@ export const updateCurso = async (
 };
 
 // Crear un nuevo curso
-export const postCurso = async (data: Curso): Promise<Curso> => {
+export const createCurso = async (data: Curso): Promise<Curso> => {
   const response = await api.post('/cursos', data);
   return response.data; // Devuelvo el curso creado
 };
