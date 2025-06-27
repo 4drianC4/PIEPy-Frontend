@@ -30,6 +30,7 @@ import Apirest from "./pages/Apirest";
 import LibreriasGraficas from "./pages/LibreriasGraficas";
 import Git from "./pages/Git";
 import Testing from "./pages/Testing";
+import CrearCurso from "./pages/CrearCurso";
 
 const queryClient = new QueryClient();
 
@@ -41,9 +42,10 @@ const App: React.FC = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-           <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/recorrido" element={<LearningPath />} />
           <Route path="/lecciones" element={<Lecciones />} />
+          <Route path="/crear-curso" element={<CrearCurso />} />
           <Route path="/crear-seccion" element={<CrearSeccion />} />
           <Route path="/crear-examen" element={<CrearExamen />} />
           <Route path="/crear-ejercicio" element={<CrearEjercicio />} />
