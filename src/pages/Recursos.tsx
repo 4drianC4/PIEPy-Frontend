@@ -64,7 +64,7 @@ const Recursos = () => {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Navbar />
-        <div className="flex-1 p-6 overflow-y-auto bg-white">
+        <div className="flex-1 space-y-8 max-w-4xl mx-auto py-8 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-bold">Recursos de Aprendizaje</h2>

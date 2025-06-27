@@ -58,7 +58,7 @@ function Home() {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Navbar />
-        <div className="flex-1 p-6 overflow-y-auto bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="flex-1 space-y-8 max-w-4xl mx-auto py-8 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="mb-10 text-center md:text-left">
               <h1 className="text-4xl font-bold mb-4 text-gray-800">

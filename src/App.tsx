@@ -41,7 +41,7 @@ const App: React.FC = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+           <Route path="/login" element={<Login />} />
           <Route path="/recorrido" element={<LearningPath />} />
           <Route path="/lecciones" element={<Lecciones />} />
           <Route path="/crear-seccion" element={<CrearSeccion />} />

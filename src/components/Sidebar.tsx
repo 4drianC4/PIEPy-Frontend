@@ -38,9 +38,8 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onSelect }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const [activeTopic, setActiveTopic] = useState("");
-  const [openLevel, setOpenLevel] = useState<
-    "basic" | "intermed" | "advanced" | null
-  >(null);
+  const [openLevel, setOpenLevel] = useState<"basic" | "intermed" | "advanced" | null>(null);
+  const [showOpenLevels, setShowLevels] = useState(false);
   const [showTools, setShowTools] = useState(false);
   const [showCommunity, setShowCommunity] = useState(false);
 
@@ -50,6 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onSelect }) => {
       "/crear-ejercicio",
       "/crear-examen",
     ].includes(location.pathname);
+
     const isCommunityRoute = [
       "/comunidad",
       "/progreso",
@@ -59,9 +59,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onSelect }) => {
     setShowTools(isCreationRoute);
     setShowCommunity(isCommunityRoute);
 
-    if (location.pathname.startsWith("/lecciones") && !openLevel) {
-      setOpenLevel("basic");
-    }
   }, [location.pathname]);
 
   if (isMobile) return null;
@@ -116,34 +113,21 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onSelect }) => {
       </div>
 
       <div className="flex-1 space-y-6 pb-6">
+
         {/* Navegación Principal */}
         <div>
           <Link
             to="/"
             className={`flex items-center py-2 px-3 rounded-md mb-2 ${
-              isActive("/")
-                ? "bg-[#71AFD9] font-semibold"
-                : "hover:bg-[#71AFD9]"
+              isActive("/") ? "bg-[#71AFD9] font-semibold" : "hover:bg-[#71AFD9]"
             }`}
           >
             Inicio
           </Link>
           <Link
-            to="/recorrido"
-            className={`flex items-center py-2 px-3 rounded-md mb-2 ${
-              isActive("/recorrido")
-                ? "bg-[#71AFD9] font-semibold"
-                : "hover:bg-[#71AFD9]"
-            }`}
-          >
-            Ruta de Aprendizaje
-          </Link>
-          <Link
             to="/recursos"
             className={`flex items-center py-2 px-3 rounded-md ${
-              isActive("/recursos")
-                ? "bg-[#71AFD9] font-semibold"
-                : "hover:bg-[#71AFD9]"
+              isActive("/recursos") ? "bg-[#71AFD9] font-semibold" : "hover:bg-[#71AFD9]"
             }`}
           >
             <BookOpen className="w-5 h-5 mr-2" />
@@ -175,37 +159,14 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onSelect }) => {
                 transition={{ duration: 0.3 }}
                 className="ml-8 mt-2 space-y-2"
               >
-                <Link
-                  to="/comunidad"
-                  className={`block py-2 px-3 rounded-md ${
-                    isActive("/comunidad")
-                      ? "bg-[#A3CEF1] font-semibold"
-                      : "hover:bg-[#A3CEF1]"
-                  }`}
-                >
+                <Link to="/comunidad" className={`block py-2 px-3 rounded-md ${isActive("/comunidad") ? "bg-[#A3CEF1] font-semibold" : "hover:bg-[#A3CEF1]"}`}>
                   Foro Comunitario
                 </Link>
-                <Link
-                  to="/progreso"
-                  className={`block py-2 px-3 rounded-md ${
-                    isActive("/progreso")
-                      ? "bg-[#A3CEF1] font-semibold"
-                      : "hover:bg-[#A3CEF1]"
-                  }`}
-                >
-                  <BarChart2 className="inline w-4 h-4 mr-2" />
-                  Mi Progreso
+                <Link to="/progreso" className={`block py-2 px-3 rounded-md ${isActive("/progreso") ? "bg-[#A3CEF1] font-semibold" : "hover:bg-[#A3CEF1]"}`}>
+                  <BarChart2 className="inline w-4 h-4 mr-2" /> Mi Progreso
                 </Link>
-                <Link
-                  to="/certificaciones"
-                  className={`block py-2 px-3 rounded-md ${
-                    isActive("/certificaciones")
-                      ? "bg-[#A3CEF1] font-semibold"
-                      : "hover:bg-[#A3CEF1]"
-                  }`}
-                >
-                  <Award className="inline w-4 h-4 mr-2" />
-                  Certificaciones
+                <Link to="/certificaciones" className={`block py-2 px-3 rounded-md ${isActive("/certificaciones") ? "bg-[#A3CEF1] font-semibold" : "hover:bg-[#A3CEF1]"}`}>
+                  <Award className="inline w-4 h-4 mr-2" /> Certificaciones
                 </Link>
               </motion.div>
             )}
@@ -236,34 +197,13 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onSelect }) => {
                 transition={{ duration: 0.3 }}
                 className="ml-8 mt-2 space-y-2"
               >
-                <Link
-                  to="/crear-seccion"
-                  className={`block py-2 px-3 rounded-md ${
-                    isActive("/crear-seccion")
-                      ? "bg-[#A3CEF1] font-semibold"
-                      : "hover:bg-[#A3CEF1]"
-                  }`}
-                >
+                <Link to="/crear-seccion" className={`block py-2 px-3 rounded-md ${isActive("/crear-seccion") ? "bg-[#A3CEF1] font-semibold" : "hover:bg-[#A3CEF1]"}`}>
                   Nueva Sección
                 </Link>
-                <Link
-                  to="/crear-ejercicio"
-                  className={`block py-2 px-3 rounded-md ${
-                    isActive("/crear-ejercicio")
-                      ? "bg-[#A3CEF1] font-semibold"
-                      : "hover:bg-[#A3CEF1]"
-                  }`}
-                >
+                <Link to="/crear-ejercicio" className={`block py-2 px-3 rounded-md ${isActive("/crear-ejercicio") ? "bg-[#A3CEF1] font-semibold" : "hover:bg-[#A3CEF1]"}`}>
                   Nuevo Ejercicio
                 </Link>
-                <Link
-                  to="/crear-examen"
-                  className={`block py-2 px-3 rounded-md ${
-                    isActive("/crear-examen")
-                      ? "bg-[#A3CEF1] font-semibold"
-                      : "hover:bg-[#A3CEF1]"
-                  }`}
-                >
+                <Link to="/crear-examen" className={`block py-2 px-3 rounded-md ${isActive("/crear-examen") ? "bg-[#A3CEF1] font-semibold" : "hover:bg-[#A3CEF1]"}`}>
                   Nuevo Examen
                 </Link>
               </motion.div>
@@ -271,45 +211,60 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onSelect }) => {
           </AnimatePresence>
         </div>
 
-        {/* Niveles de Aprendizaje */}
+        {/* Ruta de Aprendizaje */}
         <div>
-          <h2
-            className="text-xl font-semibold mb-4 cursor-pointer hover:underline"
-            onClick={() => setOpenLevel(openLevel ? null : "basic")}
+          <button
+            className={`flex items-center justify-between w-full py-2 px-3 rounded-md mb-2 ${
+              showOpenLevels ? "bg-[#71AFD9]" : "hover:bg-[#71AFD9]"
+            }`}
+            onClick={() => setShowLevels(!showOpenLevels)}
           >
-            Niveles de Aprendizaje
-          </h2>
-          <ul className="space-y-2 text-md font-semibold">
-            <li
-              onClick={() => toggleLevel("basic")}
-              className="cursor-pointer hover:underline hover:bg-[#71AFD9] rounded-md px-2 py-1"
-            >
-              • Básico
-            </li>
-            <AnimatePresence>
-              {openLevel === "basic" && renderTopics(topicsBasic)}
-            </AnimatePresence>
+            <span>Ruta de Aprendizaje</span>
+            <span>{showOpenLevels ? "−" : "+"}</span>
+          </button>
 
-            <li
-              onClick={() => toggleLevel("intermed")}
-              className="cursor-pointer hover:underline hover:bg-[#71AFD9] rounded-md px-2 py-1"
-            >
-              • Intermedio
-            </li>
-            <AnimatePresence>
-              {openLevel === "intermed" && renderTopics(topicsIntermed)}
-            </AnimatePresence>
+          <AnimatePresence>
+            {showOpenLevels && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ul className="space-y-2 text-md font-semibold mt-2">
+                  <li
+                    onClick={() => toggleLevel("basic")}
+                    className="cursor-pointer hover:underline hover:bg-[#71AFD9] rounded-md px-2 py-1"
+                  >
+                    • Básico
+                  </li>
+                  <AnimatePresence>
+                    {openLevel === "basic" && renderTopics(topicsBasic)}
+                  </AnimatePresence>
 
-            <li
-              onClick={() => toggleLevel("advanced")}
-              className="cursor-pointer hover:underline hover:bg-[#71AFD9] rounded-md px-2 py-1"
-            >
-              • Avanzado
-            </li>
-            <AnimatePresence>
-              {openLevel === "advanced" && renderTopics(topicsAdvanced)}
-            </AnimatePresence>
-          </ul>
+                  <li
+                    onClick={() => toggleLevel("intermed")}
+                    className="cursor-pointer hover:underline hover:bg-[#71AFD9] rounded-md px-2 py-1"
+                  >
+                    • Intermedio
+                  </li>
+                  <AnimatePresence>
+                    {openLevel === "intermed" && renderTopics(topicsIntermed)}
+                  </AnimatePresence>
+
+                  <li
+                    onClick={() => toggleLevel("advanced")}
+                    className="cursor-pointer hover:underline hover:bg-[#71AFD9] rounded-md px-2 py-1"
+                  >
+                    • Avanzado
+                  </li>
+                  <AnimatePresence>
+                    {openLevel === "advanced" && renderTopics(topicsAdvanced)}
+                  </AnimatePresence>
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>

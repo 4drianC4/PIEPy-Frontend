@@ -17,8 +17,8 @@ const Navbar: React.FC = () => {
         <div className="hidden md:flex items-center space-x-8">
           <Link to="/" className="text-white font-medium hover:underline">Inicio</Link>
           <Link to="/recorrido" className="text-white font-medium hover:underline">Ruta de Aprendizaje</Link>
-          <Link to="/recursos" className="text-white font-medium hover:underline">Recursos</Link>
-          <Link to="/lecciones" className="text-white font-medium hover:underline">Lecciones</Link>
+          {/* <Link to="/recursos" className="text-white font-medium hover:underline">Recursos</Link> */}
+          {/* <Link to="/lecciones" className="text-white font-medium hover:underline">Lecciones</Link> */}
         </div>
         {isMobile && (
           <Link to="/" className="text-white font-medium">Python Academy</Link>
