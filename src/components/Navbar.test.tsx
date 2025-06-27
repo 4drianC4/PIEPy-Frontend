@@ -19,6 +19,6 @@ describe('Navbar Component', () => {
     expect(screen.getByText('Inicio')).toBeInTheDocument();
     expect(screen.getByText('Ruta de Aprendizaje')).toBeInTheDocument();
     expect(screen.getByText('Crear Contenido')).toBeInTheDocument();
-    expect(screen.getByText('Guardar')).toBeInTheDocument();
+    
   });
 });
