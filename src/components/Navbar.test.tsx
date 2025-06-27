@@ -16,7 +16,7 @@ describe('Navbar Component', () => {
       </BrowserRouter>
     );
     
-    expect(screen.getByText('Crear Curso')).toBeInTheDocument();
+    expect(screen.getByText('Crear Contenido')).toBeInTheDocument();
     expect(screen.getByText('Apoyo Estudiantil')).toBeInTheDocument();
     expect(screen.getByText('Evaluacion')).toBeInTheDocument();
     expect(screen.getByText('Certificacion')).toBeInTheDocument();
